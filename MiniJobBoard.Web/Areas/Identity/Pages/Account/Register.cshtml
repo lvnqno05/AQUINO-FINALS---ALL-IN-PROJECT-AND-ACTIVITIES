@@ -1,0 +1,67 @@
+@page
+@model MiniJobBoard.Web.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Create account";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center mt-5">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="card auth-card shadow-sm">
+      <div class="card-header bg-white border-0 pt-4">
+        <h2 class="text-center m-0">Create your account</h2>
+        <p class="text-muted text-center m-0">Sign up as an Employer to post jobs, or as a Worker to apply.</p>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          @Html.AntiForgeryToken()
+          <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+          <div class="mb-3">
+            <label asp-for="Input.Email" class="form-label"></label>
+            <div class="input-group">
+              <span class="input-group-text">@@</span>
+              <input asp-for="Input.Email" class="form-control" autocomplete="username" type="email" placeholder="Email address" />
+            </div>
+            <span class="form-text">We'll use this for your account login.</span>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label asp-for="Input.Password" class="form-label"></label>
+            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="Password" />
+            <span class="form-text">Minimum 8 characters, include upper, number & symbol.</span>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Confirm password" />
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">I am</label>
+            <div class="btn-group d-flex" role="group">
+              <input type="radio" class="btn-check" name="Input.Role" id="roleEmployer" value="Employer" checked="@(Model.Input.Role == "Employer")" />
+              <label class="btn btn-outline-primary" for="roleEmployer">Employer</label>
+
+              <input type="radio" class="btn-check" name="Input.Role" id="roleWorker" value="Worker" checked="@(Model.Input.Role == "Worker")" />
+              <label class="btn btn-outline-primary" for="roleWorker">Worker</label>
+            </div>
+            <span asp-validation-for="Input.Role" class="text-danger"></span>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg">Create account</button>
+            <a class="btn btn-outline-secondary" asp-page="/Account/Login">Already have an account? Login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}
