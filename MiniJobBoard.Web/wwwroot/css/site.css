@@ -1,0 +1,73 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* Job board styles */
+:root {
+  --mono-50: #eef2ff;
+  --mono-100: #e0e7ff;
+  --mono-200: #c7d2fe;
+  --mono-300: #a5b4fc;
+  --mono-400: #818cf8;
+  --mono-500: #6366f1; /* primary */
+  --mono-600: #4f46e5;
+  --mono-700: #4338ca;
+  --mono-800: #3730a3;
+  --mono-900: #312e81;
+}
+body.theme-mono {
+  background: linear-gradient(180deg, var(--mono-50), #ffffff 30%);
+}
+body.theme-mono .navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--mono-100);
+}
+body.theme-mono .navbar .nav-link {
+  color: #111827;
+}
+body.theme-mono .navbar .nav-link:hover {
+  color: var(--mono-600);
+}
+.auth-card, .apply-card {
+  border: 1px solid var(--mono-100);
+  border-radius: 12px;
+}
+.auth-card .card-header, .apply-card .card-header {
+  background: linear-gradient(180deg, #fff, var(--mono-50));
+}
+.job-card {
+  border-left: 4px solid var(--mono-500);
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.job-card:hover {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+  transform: translateY(-2px);
+}
+.job-hero .badge {
+  font-weight: 500;
+}
+.badge.bg-success-subtle {
+  background-color: #e9f7ef;
+}
+.border-success-subtle {
+  border-color: #bfe6cf !important;
+}

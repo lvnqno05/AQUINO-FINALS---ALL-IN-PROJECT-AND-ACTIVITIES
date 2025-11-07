@@ -1,0 +1,52 @@
+@model MiniJobBoard.Infrastructure.Entities.Job
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="job-hero card mb-4">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <h1 class="card-title mb-1">@Model.Title</h1>
+        <div class="text-muted">@Model.Employer?.CompanyName</div>
+        <div class="mt-2 d-flex flex-wrap gap-2">
+          @if (!string.IsNullOrWhiteSpace(Model.Location))
+          {
+              <span class="badge bg-light text-dark border">@Model.Location</span>
+          }
+          <span class="badge bg-light text-dark border">Posted @Model.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</span>
+          @{
+              string salary = "";
+              if (Model.SalaryMin is null && Model.SalaryMax is null) salary = "";
+              else if (Model.SalaryMin is not null && Model.SalaryMax is not null) salary = $"{Model.SalaryMin.Value.ToString("C0")} - {Model.SalaryMax.Value.ToString("C0")}";
+              else if (Model.SalaryMin is not null) salary = $"From {Model.SalaryMin.Value.ToString("C0")}";
+              else salary = $"Up to {Model.SalaryMax!.Value.ToString("C0")}";
+          }
+          @if (!string.IsNullOrEmpty(salary))
+          {
+              <span class="badge bg-success-subtle text-success border border-success-subtle">@salary</span>
+          }
+        </div>
+      </div>
+      <div class="ms-auto">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <a class="btn btn-success btn-lg" asp-controller="Jobs" asp-action="Apply" asp-route-id="@Model.Id">Apply now</a>
+        }
+        else
+        {
+            <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details","Jobs", new { id = Model.Id })">Login to apply</a>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header bg-white">
+    <h5 class="m-0">Job description</h5>
+  </div>
+  <div class="card-body">
+    <div class="job-description" style="white-space: pre-wrap;">@Model.Description</div>
+  </div>
+</div>

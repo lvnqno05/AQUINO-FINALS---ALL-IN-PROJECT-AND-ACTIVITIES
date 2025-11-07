@@ -1,0 +1,64 @@
+@model IEnumerable<MiniJobBoard.Infrastructure.Entities.Job>
+@{
+    ViewData["Title"] = "Jobs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="m-0">Open Jobs</h1>
+    @if (User.IsInRole("Employer"))
+    {
+        <a class="btn btn-primary" asp-controller="Jobs" asp-action="Create">Post a job</a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No jobs posted yet.</div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var job in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 job-card">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-1">
+                            <a asp-controller="Jobs" asp-action="Details" asp-route-id="@job.Id" class="stretched-link text-decoration-none">@job.Title</a>
+                        </h5>
+                        <div class="text-muted small">@job.Employer?.CompanyName</div>
+                        <div class="mt-2 d-flex flex-wrap gap-2">
+                            @if (!string.IsNullOrWhiteSpace(job.Location))
+                            {
+                                <span class="badge bg-light text-dark border">@job.Location</span>
+                            }
+                            <span class="badge bg-light text-dark border">@job.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd")</span>
+                            @{
+                                string salary = "";
+                                if (job.SalaryMin is null && job.SalaryMax is null) salary = "";
+                                else if (job.SalaryMin is not null && job.SalaryMax is not null) salary = $"{job.SalaryMin.Value.ToString("C0")} - {job.SalaryMax.Value.ToString("C0")}";
+                                else if (job.SalaryMin is not null) salary = $"From {job.SalaryMin.Value.ToString("C0")}";
+                                else salary = $"Up to {job.SalaryMax!.Value.ToString("C0")}";
+                            }
+                            @if (!string.IsNullOrEmpty(salary))
+                            {
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">@salary</span>
+                            }
+                        </div>
+                        <div class="mt-auto pt-3 d-flex gap-2">
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                <a class="btn btn-sm btn-outline-success" asp-controller="Jobs" asp-action="Apply" asp-route-id="@job.Id">Apply</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-sm btn-outline-primary" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Index","Jobs")">Login to apply</a>
+                            }
+                            <a class="btn btn-sm btn-outline-secondary" asp-controller="Jobs" asp-action="Details" asp-route-id="@job.Id">View details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,67 @@
+@model MiniJobBoard.Web.Models.JobCreateViewModel
+@{
+    ViewData["Title"] = "Post a job";
+}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-12 col-lg-10">
+    <div class="card apply-card shadow-sm">
+      <div class="card-header bg-white border-0 pt-4 pb-0">
+        <h2 class="m-0">Post a job</h2>
+        <div class="text-muted">Describe your opening clearly to attract the right candidates.</div>
+      </div>
+      <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" placeholder="Job title" />
+                <div class="form-text">E.g., Junior .NET Developer</div>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="8" placeholder="Describe the role, responsibilities, and requirements..."></textarea>
+                <span class="form-text">Include responsibilities, qualifications, and benefits.</span>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Location" class="form-label"></label>
+                    <input asp-for="Location" class="form-control" placeholder="Location (e.g., Remote, New York)" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="SalaryMin" class="form-label"></label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input asp-for="SalaryMin" class="form-control" type="number" inputmode="decimal" min="0" step="1" placeholder="Minimum" />
+                    </div>
+                    <span asp-validation-for="SalaryMin" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="SalaryMax" class="form-label"></label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input asp-for="SalaryMax" class="form-control" type="number" inputmode="decimal" min="0" step="1" placeholder="Maximum" />
+                    </div>
+                    <span asp-validation-for="SalaryMax" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

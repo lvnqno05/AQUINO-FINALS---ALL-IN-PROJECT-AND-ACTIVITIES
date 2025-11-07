@@ -1,0 +1,71 @@
+@model IEnumerable<MiniJobBoard.Infrastructure.Entities.JobApplication>
+@using System.Linq
+@{
+    ViewData["Title"] = "My applications";
+    var total = Model.Count();
+    var pending = Model.Count(a => a.Status == "Pending");
+    var accepted = Model.Count(a => a.Status == "Accepted");
+    var rejected = Model.Count(a => a.Status == "Rejected");
+    var cancelled = Model.Count(a => a.Status == "Cancelled");
+}
+
+<div class="d-flex justify-content-between align-items-end mb-3 flex-wrap gap-2">
+  <div>
+    <h1 class="m-0">My applications</h1>
+    <div class="mt-2 d-flex gap-2">
+        <span class="badge rounded-pill bg-secondary">@total total</span>
+        @if (pending > 0) { <span class="badge rounded-pill bg-warning text-dark">@pending pending</span> }
+        @if (accepted > 0) { <span class="badge rounded-pill bg-success">@accepted accepted</span> }
+        @if (rejected > 0) { <span class="badge rounded-pill bg-danger">@rejected rejected</span> }
+        @if (cancelled > 0) { <span class="badge rounded-pill bg-dark">@cancelled cancelled</span> }
+    </div>
+  </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have not applied to any jobs yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Job</th>
+                    <th>Status</th>
+                    <th>Applied</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>@a.Job?.Title</td>
+                        <td>
+                            @if (a.Status == "Accepted") { <span class="badge bg-success">Accepted</span>; }
+                            else if (a.Status == "Rejected") { <span class="badge bg-danger">Rejected</span>; }
+                            else if (a.Status == "Cancelled") { <span class="badge bg-dark">Cancelled</span>; }
+                            else { <span class="badge bg-secondary">Pending</span>; }
+                        </td>
+                        <td>@a.AppliedAt.ToLocalTime().ToString("yyyy-MM-dd")</td>
+                        <td class="text-end">
+                            @if (a.Status == "Pending")
+                            {
+                                <form asp-action="CancelApplication" asp-route-id="@a.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-outline-secondary" disabled>Cancel</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

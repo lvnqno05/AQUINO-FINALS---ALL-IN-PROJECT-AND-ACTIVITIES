@@ -1,0 +1,40 @@
+@model MiniJobBoard.Web.Models.JobApplyViewModel
+@{
+    ViewData["Title"] = "Apply";
+}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-12 col-lg-10">
+    <div class="card apply-card shadow-sm">
+      <div class="card-header bg-white border-0 pt-4 pb-0">
+        <h2 class="m-0">Apply to @ViewBag.JobTitle</h2>
+        @if (ViewBag.Company != null)
+        {
+            <div class="text-muted">@ViewBag.Company</div>
+        }
+      </div>
+      <div class="card-body p-4">
+        <form asp-action="Apply" method="post">
+            <input type="hidden" asp-for="JobId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="CoverLetter" class="form-label">Cover letter</label>
+                <textarea asp-for="CoverLetter" rows="10" class="form-control" placeholder="Tell us why you're a great fit, relevant experience, and availability..."></textarea>
+                <div class="form-text">Tip: Keep it concise (3–5 short paragraphs).</div>
+                <span asp-validation-for="CoverLetter" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success btn-lg">Submit application</button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Back to jobs</a>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
